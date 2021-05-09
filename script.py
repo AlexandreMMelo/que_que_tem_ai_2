@@ -1,6 +1,6 @@
 import requests
 
-URI = 'http://104.131.110.184/level1/recebe.php'
+URI = ''
 
 
 NOME_BANCO = ''
